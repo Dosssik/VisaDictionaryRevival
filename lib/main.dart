@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Дайте визу',
       theme: ThemeData.dark(),
-      home: MyHomePage(),
+      home: CountriesListPage(),
     );
   }
 }

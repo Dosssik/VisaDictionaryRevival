@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:give_me_visa/db/Database.dart';
+import 'package:give_me_visa/entity/Country.dart';
 
-class MyHomePage extends StatefulWidget {
+class CountriesListPage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _CountriesListPageState createState() => _CountriesListPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-
-  final dataSource = <String>["fasdf", "rweroiwe", "vvvvv"];
+class _CountriesListPageState extends State<CountriesListPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +15,25 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text("Дайте визу"),
       ),
-      body: ListView.separated(
-          padding: const EdgeInsets.all(16.0),
-          itemCount: dataSource.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(dataSource[index]),
-              subtitle: Text("Subtitle"),
-
-            );
-          }, separatorBuilder: (BuildContext context, int index) => Divider(),
-      ),
+      body: FutureBuilder<List<Country>>(
+          future: DBProvider.db.getCountries(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Country>> snapshot) {
+            if (snapshot.hasData) {
+              return ListView.separated(
+                  itemCount: snapshot.data.length,
+                  separatorBuilder: (BuildContext context, int index) => Divider(),
+                  itemBuilder: (BuildContext context, int index) {
+                    var country = snapshot.data[index];
+                        return ListTile(
+                          title: Text(country.countryName),
+                          subtitle: Text(country.flag),
+                        );
+                  });
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          }),
     );
   }
 }
