@@ -16,23 +16,31 @@ class Country {
 
   int id;
   String countryName;
+  String description;
   String flag;
 
   Country({
     this.id,
     this.countryName,
+    this.description,
     this.flag,
   });
 
   factory Country.fromJson(Map<String, dynamic> json) => new Country(
     id: json["id"],
     countryName: json["name"],
+    description: json["info"],
     flag: json["flag"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "countryName": countryName,
+    "description": description,
     "flag": flag,
   };
+
+  String getAssetImagePath() {
+    return "images/$flag.png";
+  }
 }
