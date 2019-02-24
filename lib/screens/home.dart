@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:give_me_visa/db/Database.dart';
-import 'package:give_me_visa/entity/Country.dart';
+import 'package:give_me_visa/db/database.dart';
+import 'package:give_me_visa/screens/country_description.dart';
+import 'package:give_me_visa/entity/country.dart';
 
-class CountriesListPage extends StatefulWidget {
+class CountriesListRoute extends StatefulWidget {
   @override
-  _CountriesListPageState createState() => _CountriesListPageState();
+  _CountriesListRouteState createState() => _CountriesListRouteState();
 }
 
-class _CountriesListPageState extends State<CountriesListPage> {
-
+class _CountriesListRouteState extends State<CountriesListRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,13 +22,36 @@ class _CountriesListPageState extends State<CountriesListPage> {
             if (snapshot.hasData) {
               return ListView.separated(
                   itemCount: snapshot.data.length,
-                  separatorBuilder: (BuildContext context, int index) => Divider(),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      Divider(),
                   itemBuilder: (BuildContext context, int index) {
                     var country = snapshot.data[index];
-                        return ListTile(
-                          title: Text(country.countryName),
-                          subtitle: Text(country.flag),
+                    return ListTile(
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 10.0),
+                      leading: Container(
+                        width: 48,
+                        height: 48,
+                        padding: EdgeInsets.only(right: 12.0),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage(
+                                  country.getAssetImagePath(),
+                                ))),
+                      ),
+                      title: Text(country.countryName),
+                      subtitle: Text(country.flag),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CountryDescription(country)),
                         );
+                      },
+                    );
                   });
             } else {
               return Center(child: CircularProgressIndicator());
