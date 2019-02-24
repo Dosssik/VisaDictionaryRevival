@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:give_me_visa/db/Database.dart';
-import 'package:give_me_visa/entity/Country.dart';
+import 'package:give_me_visa/db/database.dart';
+import 'package:give_me_visa/entity/country.dart';
 
-class CountriesListPage extends StatefulWidget {
+class CountriesListRoute extends StatefulWidget {
   @override
-  _CountriesListPageState createState() => _CountriesListPageState();
+  _CountriesListRouteState createState() => _CountriesListRouteState();
 }
 
-class _CountriesListPageState extends State<CountriesListPage> {
+class _CountriesListRouteState extends State<CountriesListRoute> {
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +28,7 @@ class _CountriesListPageState extends State<CountriesListPage> {
                         return ListTile(
                           title: Text(country.countryName),
                           subtitle: Text(country.flag),
+                          onTap: _openDescriptionScreen(country.id),
                         );
                   });
             } else {
@@ -36,4 +37,9 @@ class _CountriesListPageState extends State<CountriesListPage> {
           }),
     );
   }
+
+  _openDescriptionScreen(int id) {
+
+  }
+
 }

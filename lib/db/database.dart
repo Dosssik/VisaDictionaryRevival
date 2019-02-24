@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 
-import 'package:give_me_visa/entity/Country.dart';
+import 'package:give_me_visa/entity/country.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
