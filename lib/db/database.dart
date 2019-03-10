@@ -7,7 +7,6 @@ import 'package:path/path.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
 
 class DBProvider {
-
   final databaseLocalName = "local.db";
   final databaseAssetName = "myowndb.db";
 
@@ -17,6 +16,7 @@ class DBProvider {
 
   static final DBProvider db = DBProvider._();
   static Database _database;
+  static List<Country> _cachedCountries;
 
   Future<Database> get database async {
     if (_database != null) return _database;
@@ -40,12 +40,12 @@ class DBProvider {
     } catch (e) {
       print("Error $e");
     }
-
     // Should happen only the first time you launch your application
     print("Database initialization - Creating new copy from asset");
 
     // Copy from asset
-    ByteData data = await rootBundle.load(join(assetFolderName, databaseAssetName));
+    ByteData data =
+        await rootBundle.load(join(assetFolderName, databaseAssetName));
     List<int> bytes =
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
@@ -55,7 +55,12 @@ class DBProvider {
     return await openDatabase(path, readOnly: true);
   }
 
-  Future<List<Country>> getCountries() async {
+  Future<List<Country>> getCountries(String searchText) async {
+    if (_cachedCountries != null) {
+      return _cachedCountries
+          .where((country) => country.countryName.contains(searchText))
+          .toList();
+    }
     final db = await database;
 
     var result = await db.query(Country.tableName);
@@ -64,6 +69,9 @@ class DBProvider {
         ? result.map((jsonCountry) => Country.fromJson(jsonCountry)).toList()
         : [];
 
-    return mappedResult;
+    _cachedCountries = mappedResult;
+    return mappedResult
+        .where((country) => country.countryName.contains(searchText))
+        .toList();
   }
 }
